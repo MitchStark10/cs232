@@ -12,6 +12,10 @@
 #include <unistd.h>
 using namespace std;
 
+/**
+ * @brief Keeps track of directories in your executable path.
+ *  Searches for programs in these paths.
+ */
 class Path
 {
   public:
@@ -22,15 +26,37 @@ class Path
     vector<string> directories;
 };
 
+/**
+ * @brief Maintains and manipulates your current working directory.
+ */
 class Prompt
 {
   public:
     Prompt(){ cwd = getcwd(cwdbuf, 255); };
     string get() const{ return cwd; };
+    int cd( string dir );
   private:
     string cwd;
-    char* ptr;
-    char* cwdbuf;
+    char cwdbuf[255];
+};
+
+/**
+ * @brief Change directories
+ * @return 0 if successful, -1 if failed.
+ */
+int Prompt::cd( string dir )
+{
+  int success;
+  success = chdir( dir.c_str() );
+  if( success == 0 )
+  {
+    cwd = getcwd(cwdbuf, 255);
+    return 0;
+  }
+  else
+  {
+    return -1;
+  }
 };
 
 /**

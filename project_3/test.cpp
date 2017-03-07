@@ -40,5 +40,22 @@ int main()
   cout << "testing Prompt::get()...\n";
   cout << "cwd is: " << my_prompt.get() << "\n";
 
+  cout << "testing Prompt::cd()...\n";
+  my_prompt.cd( ".." );
+  cout << "cwd is: " << my_prompt.get() << "\n";
+  my_prompt.cd( "../.." );
+  cout << "cwd is: " << my_prompt.get() << "\n";
+
+  cout << "testing Prompt::cd() for failure...\n";
+  if ( my_prompt.cd( "123/21/55" ) != 0 )
+  {
+    cout << "Correctly couldn't change directories\n";
+  }
+  else
+  {
+    cout << "Failure to change directories not detected\n";
+  }
+  cout << "cwd is: " << my_prompt.get() << "\n";
+
   return 0;
 }
