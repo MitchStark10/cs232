@@ -19,6 +19,10 @@ class CommandLine {
     char* command_string = new char[256];
     in.getline(command_string, 256);
 
+    if (strcmp(command_string, "") == 0) {
+        tokens.push_back("");
+    }
+
     stringstream ss(command_string);
     string buf;
     while (ss >> buf) tokens.push_back(buf);
