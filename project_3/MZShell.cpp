@@ -27,7 +27,7 @@ void MZShell::run() {
     if ((strcmp(commandline.getCommand(), "cd") == 0) && (commandline.getArgVector()[1] != NULL)) {
       int response = chdir(commandline.getArgVector(1));
       if (response < 0) {
-        cerr << "Can't find dir: " << commandline.getArgVector(1) << endl;
+        cout << "Can't find dir: " << commandline.getArgVector(1) << endl;
       } else {
         pr = Prompt();
       }
@@ -46,7 +46,12 @@ void MZShell::run() {
     int status;
 
     if (pid_ps == 0) {
-        execve(command, vec, NULL);
+        int errno = execve(command, vec, NULL);
+
+        if (errno == -1) {
+          cout << "Unable to execute: " << commandline.getCommand() << endl;
+          break;
+        }
     }
 
 
