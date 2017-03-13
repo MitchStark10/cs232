@@ -1,5 +1,5 @@
 /**
- * @author: Zach DeCook (zjd7)
+ * @author: Mitch Stark (mjs73), Zach DeCook (zjd7)
  * @date: March 11, 2017
  * @brief Prompt.cpp implements the Path class.
  */

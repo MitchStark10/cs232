@@ -1,5 +1,5 @@
 /*
-Created by: Mitch Stark and Zach DeCook
+Written by: Mitch Stark mjs73, Zach DeCook (zjd7)
 Purpose: run the MZShell
 3/12/17
 */

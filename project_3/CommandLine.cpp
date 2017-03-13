@@ -1,5 +1,5 @@
 /*
-Written by: Mitch Stark
+Written by: Mitch Stark mjs73, Zach DeCook (zjd7)
 3/10/17
 Purpose: Define the CommandLine class
 */

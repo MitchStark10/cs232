@@ -1,5 +1,5 @@
 /**
- * @author: Zach DeCook (zjd7)
+ * @author: Mitch Stark (mjs73), Zach DeCook (zjd7)
  * @date: March 6, 2017
  * @brief test.cpp tests classes to make sure they are compliant.
  */

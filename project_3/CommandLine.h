@@ -1,5 +1,5 @@
 /*
-Written by: Mitch Stark
+Written by: Mitch Stark mjs73, Zach DeCook (zjd7)
 3/10/17
 Purpose: Implement the CommandLine class
 */
@@ -28,6 +28,9 @@ class CommandLine {
     while (ss >> buf) tokens.push_back(buf);
   };
 
+  ~CommandLine() {
+      delete command_string;
+  }
   //gets the first word in the string
   char* getCommand() const;
 
