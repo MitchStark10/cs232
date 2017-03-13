@@ -35,6 +35,13 @@ void MZShell::run() {
     }
 
     //execute a "bin" command
+    int index = pa.find(commandline.getCommand());
+    if (index == -1) {
+        continue;
+    }
+
+    char* path = (char*)pa.getDirectory(index).c_str();
+
     char command[261];
     char* command_dir = (char*)"/bin";
     strcpy(command, "/bin/");
@@ -46,10 +53,13 @@ void MZShell::run() {
     int status;
 
     if (pid_ps == 0) {
+
+        vec[commandline.getArgCount()] = NULL;
         int errno = execve(command, vec, NULL);
 
         if (errno == -1) {
           cout << "Unable to execute: " << commandline.getCommand() << endl;
+          perror("Reason: ");
           break;
         }
     }
