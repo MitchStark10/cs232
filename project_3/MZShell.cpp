@@ -24,7 +24,7 @@ void MZShell::run() {
 
 
     //check for cd command, if found, then continue to the top of the loop
-    if ((strcmp(commandline.getCommand(), "cd") == 0) && (commandline.getArgVector()[1] != NULL)) {
+    if ((strcmp(commandline.getCommand(), "cd") == 0) && (commandline.getArgVector(1) != NULL)) {
       int response = chdir(commandline.getArgVector(1));
       if (response < 0) {
         cout << "Can't find dir: " << commandline.getArgVector(1) << endl;
@@ -37,6 +37,7 @@ void MZShell::run() {
     //execute a "bin" command
     int index = pa.find(commandline.getCommand());
     if (index == -1) {
+	cout << commandline.getCommand() << ": Command not found" << endl << flush;
         continue;
     }
 
