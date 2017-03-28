@@ -1,3 +1,8 @@
+/*
+Written by: Mitch Stark mjs73, Zach DeCook (zjd7)
+3/10/17
+Purpose: Define the MZShell class
+*/
 #include "CommandLine.h"
 #include "Path.h"
 #include "Prompt.h"

@@ -1,3 +1,8 @@
+/*
+Written by: Mitch Stark mjs73, Zach DeCook (zjd7)
+3/10/17
+Purpose: Define the CommandLine class
+*/
 #include "CommandLine.h"
 
 char* CommandLine::getCommand() const {
@@ -9,7 +14,6 @@ int CommandLine::getArgCount() const {
 }
 
 char** CommandLine::getArgVector() const {
-  //if allowed
   //return tokens;
   char** arr = new char*[tokens.size()];
   for(int i = 0; i < tokens.size(); i++) {

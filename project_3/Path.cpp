@@ -1,5 +1,5 @@
 /**
- * @author: Zach DeCook (zjd7)
+ * @author: Mitch Stark (mjs73), Zach DeCook (zjd7)
  * @date: March 6, 2017
  * @brief Path.cpp implements the Path class.
  */
@@ -40,7 +40,7 @@ int Path::find( const string& program ) const
     dirp = opendir( directories[i].c_str() );
     if ( dirp != NULL )
     {
-      while ( dp = readdir( dirp ) )
+      while ( (dp = readdir( dirp )) )
       {
         if (strlen(dp->d_name) == program.length()
           && program.compare(dp->d_name) == 0)
@@ -49,8 +49,8 @@ int Path::find( const string& program ) const
           return i;
         }
       }
+      (void)closedir(dirp);
     }
-    (void)closedir(dirp);
   }
   return -1;
 }
@@ -61,5 +61,9 @@ int Path::find( const string& program ) const
  */
 string Path::getDirectory( int i ) const
 {
-  return directories[i];
+  if ( i >= 0 && i < directories.size() )
+  {
+    return directories[i];
+  }
+  throw out_of_range( "No element with that index" );
 }

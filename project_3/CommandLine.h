@@ -1,7 +1,14 @@
+/*
+Written by: Mitch Stark mjs73, Zach DeCook (zjd7)
+3/10/17
+Purpose: Implement the CommandLine class
+*/
+
 #include<iostream>
 #include <vector>
 #include <sstream>
 #include <string>
+#include <cstring>
 using namespace std;
 
 class CommandLine {
@@ -11,6 +18,10 @@ class CommandLine {
   CommandLine(std::istream& in) {
     char* command_string = new char[256];
     in.getline(command_string, 256);
+
+    if (strcmp(command_string, "") == 0) {
+        tokens.push_back("");
+    }
 
     stringstream ss(command_string);
     string buf;
