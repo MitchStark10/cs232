@@ -42,7 +42,7 @@ void *customerActions(void *vargp)
     printf("Customer [%d] attempting to enter the store...", getThreadNum());
     sem_wait(&storeSemaphore);
         printf("Customer [%d] entered the store!", getThreadNum());
-    sem_post(&storeSemaphore)
+    sem_post(&storeSemaphore);
 
     sem_wait(&customerSemaphore);
     //CRITICAL SECTION
