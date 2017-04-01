@@ -41,7 +41,7 @@ void *customerActions(void *vargp)
 {
     printf("Customer [%d] attempting to enter the store...\n", getThreadNum());
     sem_wait(&storeSemaphore);
-      printf("Customer [%d] entered the store!\n", getThreadNum());
+    printf("Customer [%d] entered the store!\n", getThreadNum());
     sem_post(&storeSemaphore);
 
     sem_wait(&customerSemaphore);
@@ -79,7 +79,7 @@ void *bakeBread() {
 void initSemaphores() {
     sem_init(&customerSemaphore, 0, 1);
     sem_init(&bakerSemaphore, 0, 1);
-    sem_init(&storeSemaphore, 0, 0.5);
+    sem_init(&storeSemaphore, 0, 2);
 }
 
 int main()
