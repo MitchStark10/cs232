@@ -31,6 +31,7 @@ void bakerCheckout() {
     printf("Customer [%d] waiting to checkout...\n", getThreadNum());
     sem_wait(&bakerSemaphore);
     //CRITICAL SECTION
+    sleep(1);
     printf("Customer [%d] has just checked out!\n", getThreadNum());
     sem_post(&bakerSemaphore);
 }
@@ -42,12 +43,14 @@ void *customerActions(void *vargp)
     printf("Customer [%d] has entered the store...\n", getThreadNum());
 
     //request bread
+    printf("Customer [%d] waiting for bread...\n", getThreadNum());
     while(breadAvailable == 0) {
-        printf("Customer [%d] waiting for bread...\n", getThreadNum());
+	//busy wait
     }
 
     breadAvailable--;
     printf("Customer [%d] received bread!\n", getThreadNum());
+    sleep(1);
     //pay
     bakerCheckout();
     //Finish the crtical section
@@ -57,6 +60,7 @@ void *customerActions(void *vargp)
 }
 
 void *bakeBread() {
+    printf("Bread baker is ready to work!\n");
     while(breadBaked != 10) {
         sem_wait(&bakerSemaphore);
         //CRITICAL SECTION
@@ -64,6 +68,7 @@ void *bakeBread() {
 	      breadBaked++;
         printf("Baker just baked a single loaf of bread\n");
         sem_post(&bakerSemaphore);
+        sleep(1);
     }
     printf("Baker is completely done baking loaves of bread.\n");
 }
