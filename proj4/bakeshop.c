@@ -28,10 +28,10 @@ int getThreadNum() {
 }
 
 void bakerCheckout() {
-    printf("Customer [%d] waiting to checkout...\n");
+    printf("Customer [%d] waiting to checkout...\n", getThreadNum());
     sem_wait(&bakerSemaphore);
     //CRITICAL SECTION
-    printf("Customer [] has just checked out!\n");
+    printf("Customer [%d] has just checked out!\n", getThreadNum());
     sem_post(&bakerSemaphore);
 }
 
