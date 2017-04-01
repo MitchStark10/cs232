@@ -14,10 +14,10 @@ bool customerWaiting = false;
 int breadAvailable = 0;
 
 void bakerCheckout() {
-    printf("Customer waiting to checkout...");
+    printf("Customer waiting to checkout...\n");
     sem_wait(&bakerSemaphore);
     //CRITICAL SECTION
-    printf("Thread has just checked out!");
+    printf("Thread has just checked out!\n");
     sem_post(&bakerSemaphore);
 }
 
@@ -29,11 +29,11 @@ void *customerActions(void *vargp)
 
     //request bread
     while(breadAvailable == 0) {
-        printf("Customer waiting for bread...");
+        printf("Customer waiting for bread...\n");
     }
 
     breadAvailable--;
-    printf("Customer received bread!");
+    printf("Customer received bread!\n");
     //pay
     bakerCheckout();
     //Finish the crtical section
@@ -48,10 +48,10 @@ void *bakeBread() {
         //CRITICAL SECTION
         breadAvailable++;
 	breadBaked++;
-        printf("Baker just baked a single loaf of bread");
+        printf("Baker just baked a single loaf of bread\n");
         sem_post(&bakerSemaphore);
     }
-    printf("Baker is completely done baking loaves of bread.");
+    printf("Baker is completely done baking loaves of bread.\n");
 }
 
 void initSemaphores() {
