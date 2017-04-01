@@ -3,11 +3,15 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <semaphore.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <vector>
 
 // A normal C function that is executed as a thread when its name
 // is specified in pthread_create()
 sem_t customerSemaphore;
 sem_t bakerSemaphore;
+vector threadIds;
 int customers = 0;
 int breadBaked = 0;
 bool customerWaiting = false;
@@ -23,9 +27,10 @@ void bakerCheckout() {
 
 void *customerActions(void *vargp)
 {
+    threadIds.push_back(syscall(SYS_gettid));
     sem_wait(&customerSemaphore);
     //CRITICAL SECTION
-    printf("Printing hello from customer\n");
+    printf("Customer \n");
 
     //request bread
     while(breadAvailable == 0) {
@@ -47,7 +52,7 @@ void *bakeBread() {
         sem_wait(&bakerSemaphore);
         //CRITICAL SECTION
         breadAvailable++;
-	breadBaked++;
+	      breadBaked++;
         printf("Baker just baked a single loaf of bread\n");
         sem_post(&bakerSemaphore);
     }
