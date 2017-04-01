@@ -39,9 +39,9 @@ void bakerCheckout() {
 
 void *customerActions(void *vargp)
 {
-    printf("Customer [%d] attempting to enter the store...", getThreadNum());
+    printf("Customer [%d] attempting to enter the store...\n", getThreadNum());
     sem_wait(&storeSemaphore);
-        printf("Customer [%d] entered the store!", getThreadNum());
+        printf("Customer [%d] entered the store!\n", getThreadNum());
     sem_post(&storeSemaphore);
 
     sem_wait(&customerSemaphore);
@@ -93,7 +93,6 @@ int main()
     pthread_create(&bakeBreadId, NULL, bakeBread, NULL);
     for(int i = 0; i < 10; i++) {
         customers++;
-        sleep(1);
         pthread_create(&tid[i], NULL, customerActions, NULL);
     }
     pthread_exit(NULL);
