@@ -50,7 +50,7 @@ void *customerActions(void *vargp)
 
     breadAvailable--;
     printf("Customer [%d] received bread!\n", getThreadNum());
-    sleep(1);
+    sleep(2);
     //pay
     bakerCheckout();
     //Finish the crtical section
