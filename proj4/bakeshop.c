@@ -41,13 +41,12 @@ void *customerActions(void *vargp)
 {
     printf("Customer [%d] attempting to enter the store...\n", getThreadNum());
     sem_wait(&storeSemaphore);
-    printf("Customer [%d] entered the store!\n", getThreadNum());
+      printf("Customer [%d] entered the store!\n", getThreadNum());
     sem_post(&storeSemaphore);
 
     sem_wait(&customerSemaphore);
-    //CRITICAL SECTION
-    printf("Customer [%d] has entered the store...\n", getThreadNum());
-
+    //request bread
+    printf("Customer [%d] waiting for bread...\n", getThreadNum());
     while(breadAvailable == 0) {
       	sleep(0.1); //sleep, check again
     }
@@ -80,7 +79,7 @@ void *bakeBread() {
 void initSemaphores() {
     sem_init(&customerSemaphore, 0, 1);
     sem_init(&bakerSemaphore, 0, 1);
-    sem_init(&storeSemaphore, 0, 5);
+    sem_init(&storeSemaphore, 0, 0.5);
 }
 
 int main()
