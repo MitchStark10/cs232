@@ -10,6 +10,7 @@
 // is specified in pthread_create()
 sem_t customerSemaphore;
 sem_t bakerSemaphore;
+sem_t storeSemaphore;
 pthread_t tid[10];
 int customers = 0;
 int breadBaked = 0;
@@ -38,6 +39,11 @@ void bakerCheckout() {
 
 void *customerActions(void *vargp)
 {
+    printf("Customer [%d] attempting to enter the store...", getThreadNum());
+    sem_wait(&storeSemaphore);
+        printf("Customer [%d] entered the store!", getThreadNum());
+    sem_post(&storeSemaphore)
+
     sem_wait(&customerSemaphore);
     //CRITICAL SECTION
     printf("Customer [%d] has entered the store...\n", getThreadNum());
@@ -76,6 +82,7 @@ void *bakeBread() {
 void initSemaphores() {
     sem_init(&customerSemaphore, 0, 1);
     sem_init(&bakerSemaphore, 0, 1);
+    sem_init(&storeSemaphore, 0, 10);
 }
 
 int main()
@@ -86,6 +93,7 @@ int main()
     pthread_create(&bakeBreadId, NULL, bakeBread, NULL);
     for(int i = 0; i < 10; i++) {
         customers++;
+        sleep(1);
         pthread_create(&tid[i], NULL, customerActions, NULL);
     }
     pthread_exit(NULL);
