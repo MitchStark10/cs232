@@ -12,6 +12,14 @@ int customers = 0;
 bool customerWaiting = false;
 int breadAvailable = 0;
 
+void bakerCheckout() {
+    printf("Customer waiting to checkout...");
+    sem_wait(&bakerSemaphore);
+    //CRITICAL SECTION
+    printf("Thread has just checked out!");
+    sem_post(&bakerSemaphore);
+}
+
 void *customerActions(void *vargp)
 {
     sem_wait(&customerSemaphore);
@@ -44,12 +52,9 @@ void bakeBread() {
     printf("Baker is completely done baking loaves of bread.");
 }
 
-void bakerCheckout() {
-    printf("Customer waiting to checkout...");
-    sem_wait(&bakerSemaphore);
-    //CRITICAL SECTION
-    printf("Thread has just checked out!");
-    sem_post(&bakerSemaphore);
+void initSemaphores() {
+    sem_init(&customerSemaphore, 0, 1);
+    sem_init(&bakerSemaphore, 0, 1);
 }
 
 int main()
@@ -63,10 +68,4 @@ int main()
     pthread_exit(NULL);
     printf("---All customers have finished---\n");
     exit(0);
-}
-
-
-void initSemaphores() {
-    sem_init(&customerSemaphore, 0, 1);
-    sem_init(&bakerSemaphore, 0, 1);
 }
