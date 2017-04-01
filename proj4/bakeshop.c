@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdbool.h>
 #include <semaphore.h>
 
 // A normal C function that is executed as a thread when its name
@@ -15,15 +16,15 @@ void *customerActions(void *vargp)
 {
     sem_wait(&customerSemaphore);
     //CRITICAL SECTION
-    printf("Printing hello from customer\n");
+    fprintf("Printing hello from customer\n");
 
     //request bread
     while(breadAvailable == 0) {
-        printf("Customer waiting for bread...");
+        fprintf("Customer waiting for bread...");
     }
 
     breadAvailable--;
-    printf("Customer received bread!");
+    fprintf("Customer received bread!");
     //pay
     bakerCheckout();
     //Finish the crtical section
@@ -37,30 +38,30 @@ void bakeBread() {
         sem_wait(&bakerSemaphore);
         //CRITICAL SECTION
         breadAvailable++;
-        printf("Baker just baked a single loaf of bread");
+        fprintf("Baker just baked a single loaf of bread");
         sem_post(&bakerSemaphore);
     }
-    printf("Baker is completely done baking loaves of bread.");
+    fprintf("Baker is completely done baking loaves of bread.");
 }
 
 void bakerCheckout() {
-    printf("Customer waiting to checkout...");
+    fprintf("Customer waiting to checkout...");
     sem_wait(&bakerSemaphore);
     //CRITICAL SECTION
-    printf("Thread has just checked out!");
+    fprintf("Thread has just checked out!");
     sem_post(&bakerSemaphore);
 }
 
 int main()
 {
     initSemaphores();
-    printf("---Creating Threads---\n");
+    fprintf("---Creating Threads---\n");
     for(int i = 0; i < 10; i++) {
         pthread_t tid;
         pthread_create(&tid, NULL, customerActions, NULL);
     }
     pthread_exit(NULL);
-    printf("---All customers have finished---\n");
+    fprintf("---All customers have finished---\n");
     exit(0);
 }
 
