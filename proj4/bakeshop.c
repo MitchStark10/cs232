@@ -9,6 +9,7 @@
 sem_t customerSemaphore;
 sem_t bakerSemaphore;
 int customers = 0;
+int breadBaked = 0;
 bool customerWaiting = false;
 int breadAvailable = 0;
 
@@ -41,11 +42,12 @@ void *customerActions(void *vargp)
     return NULL;
 }
 
-void bakeBread() {
-    while(customers != 0) {
+void *bakeBread() {
+    while(breadBaked != 10) {
         sem_wait(&bakerSemaphore);
         //CRITICAL SECTION
         breadAvailable++;
+	breadBaked++;
         printf("Baker just baked a single loaf of bread");
         sem_post(&bakerSemaphore);
     }
@@ -61,7 +63,10 @@ int main()
 {
     initSemaphores();
     printf("---Creating Threads---\n");
+    pthread_t bakeBreadId;
+    pthread_create(&bakeBreadId, NULL, bakeBread, NULL);
     for(int i = 0; i < 10; i++) {
+        customers++;
         pthread_t tid;
         pthread_create(&tid, NULL, customerActions, NULL);
     }
