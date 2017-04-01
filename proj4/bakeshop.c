@@ -5,40 +5,49 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <sys/syscall.h>
-#include <vector>
 
 // A normal C function that is executed as a thread when its name
 // is specified in pthread_create()
 sem_t customerSemaphore;
 sem_t bakerSemaphore;
-vector threadIds;
+pthread_t tid[10];
 int customers = 0;
 int breadBaked = 0;
 bool customerWaiting = false;
 int breadAvailable = 0;
 
+int getThreadNum() {
+    pthread_t id = pthread_self();
+    for(int i = 0; i < 10; i++) {
+        if (pthread_equal(id, tid[i])) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 void bakerCheckout() {
-    printf("Customer waiting to checkout...\n");
+    printf("Customer [%d] waiting to checkout...\n");
     sem_wait(&bakerSemaphore);
     //CRITICAL SECTION
-    printf("Thread has just checked out!\n");
+    printf("Customer [%d] has just checked out!\n");
     sem_post(&bakerSemaphore);
 }
 
 void *customerActions(void *vargp)
 {
-    threadIds.push_back(syscall(SYS_gettid));
     sem_wait(&customerSemaphore);
     //CRITICAL SECTION
-    printf("Customer \n");
+    printf("Customer [%d] has entered the store...", getThreadNum());
 
     //request bread
     while(breadAvailable == 0) {
-        printf("Customer waiting for bread...\n");
+        printf("Customer [%d] waiting for bread...\n", getThreadNum());
     }
 
     breadAvailable--;
-    printf("Customer received bread!\n");
+    printf("Customer [%d] received bread!\n", getThreadNum());
     //pay
     bakerCheckout();
     //Finish the crtical section
@@ -72,8 +81,7 @@ int main()
     pthread_create(&bakeBreadId, NULL, bakeBread, NULL);
     for(int i = 0; i < 10; i++) {
         customers++;
-        pthread_t tid;
-        pthread_create(&tid, NULL, customerActions, NULL);
+        pthread_create(&tid[i], NULL, customerActions, NULL);
     }
     pthread_exit(NULL);
     printf("---All customers have finished---\n");
