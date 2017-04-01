@@ -16,15 +16,15 @@ void *customerActions(void *vargp)
 {
     sem_wait(&customerSemaphore);
     //CRITICAL SECTION
-    fprintf("Printing hello from customer\n");
+    printf("Printing hello from customer\n");
 
     //request bread
     while(breadAvailable == 0) {
-        fprintf("Customer waiting for bread...");
+        printf("Customer waiting for bread...");
     }
 
     breadAvailable--;
-    fprintf("Customer received bread!");
+    printf("Customer received bread!");
     //pay
     bakerCheckout();
     //Finish the crtical section
@@ -38,30 +38,30 @@ void bakeBread() {
         sem_wait(&bakerSemaphore);
         //CRITICAL SECTION
         breadAvailable++;
-        fprintf("Baker just baked a single loaf of bread");
+        printf("Baker just baked a single loaf of bread");
         sem_post(&bakerSemaphore);
     }
-    fprintf("Baker is completely done baking loaves of bread.");
+    printf("Baker is completely done baking loaves of bread.");
 }
 
 void bakerCheckout() {
-    fprintf("Customer waiting to checkout...");
+    printf("Customer waiting to checkout...");
     sem_wait(&bakerSemaphore);
     //CRITICAL SECTION
-    fprintf("Thread has just checked out!");
+    printf("Thread has just checked out!");
     sem_post(&bakerSemaphore);
 }
 
 int main()
 {
     initSemaphores();
-    fprintf("---Creating Threads---\n");
+    printf("---Creating Threads---\n");
     for(int i = 0; i < 10; i++) {
         pthread_t tid;
         pthread_create(&tid, NULL, customerActions, NULL);
     }
     pthread_exit(NULL);
-    fprintf("---All customers have finished---\n");
+    printf("---All customers have finished---\n");
     exit(0);
 }
 
