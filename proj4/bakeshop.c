@@ -79,7 +79,7 @@ void *bakeBread() {
 void initSemaphores() {
     sem_init(&customerSemaphore, 0, 1);
     sem_init(&bakerSemaphore, 0, 1);
-    sem_init(&storeSemaphore, 0, 2);
+    sem_init(&storeSemaphore, 0, 1);
 }
 
 int main()
