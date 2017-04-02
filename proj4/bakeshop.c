@@ -37,12 +37,16 @@ void bakerCheckout() {
     sem_post(&bakerSemaphore);
 }
 
-void *customerActions(void *vargp)
-{
-    printf("Customer [%d] attempting to enter the store...\n", getThreadNum());
+void enterStore() {
     sem_wait(&storeSemaphore);
     printf("Customer [%d] entered the store!\n", getThreadNum());
     sem_post(&storeSemaphore);
+}
+
+void *customerActions(void *vargp)
+{
+    printf("Customer [%d] attempting to enter the store...\n", getThreadNum());
+    enterStore();
 
     sem_wait(&customerSemaphore);
     //request bread
