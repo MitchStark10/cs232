@@ -59,6 +59,9 @@ void bakerCheckout() {
 //5 may enter the store, 1 can request bread/checkout at a time.
 void *customerActions(void *vargp)
 {
+    if (getThreadNum() == 9) {
+        pthread_setschedprio(pthread_self(), 0);
+    }
     printf("Customer [%d] attempting to enter the store...\n", getThreadNum());
     sem_wait(&storeSemaphore);
     printf("Customer [%d] entered the store!\n", getThreadNum());

@@ -1,0 +1,5 @@
+- Does your program run the same way each time? Why?
+It does not run the same way each time. Each time it is run, the threads enter into the semaphores in a different order. This is because there is so much else going on on the machine, that there is no gaurantee which thread will enter first. 
+
+- Give you rlast customer thread the highest priority. Does this ensure that this customer is always given first priority? Why or why not?
+I have literally no idea what this question is trying to ask... 
