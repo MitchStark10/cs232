@@ -26,9 +26,10 @@ sem_t storeSemaphore;
 pthread_t tid[10];
 
 int customers = 0;
+int numCheckouts = 0;
 int breadBaked = 0;
-bool customerWaiting = false;
 int breadAvailable = 0;
+int customerWaiting = -1;
 
 
 //Return the number of the thread
@@ -46,22 +47,26 @@ int getThreadNum() {
 
 //Allows the customer to checkout
 //Ensures that the baker is not currently baking bread
-void bakerCheckout() {
-    printf("Customer [%d] waiting to checkout...\n", getThreadNum());
-    sem_wait(&bakerSemaphore);
-    //CRITICAL SECTION
-    sleep(1);
-    printf("Baker has just printed a receipt for customer [%d]\n", getThreadNum());
-    sem_post(&bakerSemaphore);
+void *bakerCheckout(void *vargp) {
+    while(numCheckouts < 10) {
+        while(customerWaiting == -1 ) {
+                sleep(0.1);
+        }
+        printf("Customer [%d] waiting to checkout...\n", customerWaiting);
+        sem_wait(&bakerSemaphore);
+        //CRITICAL SECTION
+        sleep(1);
+        printf("Baker has just printed a receipt for customer [%d]\n", customerWaiting);
+        customerWaiting = -1;
+        numCheckouts++;
+        sem_post(&bakerSemaphore);
+    }
 }
 
 //The starting place of each customer thread.
 //5 may enter the store, 1 can request bread/checkout at a time.
 void *customerActions(void *vargp)
 {
-    if (getThreadNum() == 9) {
-        pthread_setschedprio(pthread_self(), 0);
-    }
     printf("Customer [%d] attempting to enter the store...\n", getThreadNum());
     sem_wait(&storeSemaphore);
     printf("Customer [%d] entered the store!\n", getThreadNum());
@@ -77,8 +82,15 @@ void *customerActions(void *vargp)
     printf("Customer [%d] received bread!\n", getThreadNum());
     sleep(2);
     //pay
+
+    int waitNum = numCheckouts + 1;
     printf("Customer [%d] has paid!\n", getThreadNum());
-    bakerCheckout();
+    customerWaiting = getThreadNum();
+
+    while (customerWaiting != -1) {
+        //sleep until set
+        sleep(0.1);
+    }
     printf("Customer [%d] has now taken the receipt and left the store\n", getThreadNum());
     //Finish the crtical section
     customers--;
@@ -118,7 +130,9 @@ int main()
     initSemaphores();
     printf("---Creating Threads---\n");
     pthread_t bakeBreadId;
+    pthread_t checkoutId;
     pthread_create(&bakeBreadId, NULL, bakeBread, NULL);
+    pthread_create(&checkoutId, NULL, bakerCheckout, NULL);
     int i;
     for(i = 0; i < 10; i++) {
         customers++;
