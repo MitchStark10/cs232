@@ -2,4 +2,4 @@
 It does not run the same way each time. Each time it is run, the threads enter into the semaphores in a different order. This is because there is so much else going on on the machine, that there is no gaurantee which thread will enter first. 
 
 - Give you rlast customer thread the highest priority. Does this ensure that this customer is always given first priority? Why or why not?
-I have literally no idea what this question is trying to ask... 
+I used the pthread_setschedparam() method to set the last thread (the 9th) to have the highest priority in one of my test runs in order to answer this. There was not much of a difference. The 9th thread was sometimes slightly bumped up in the order of running, but never showed any signs of being gauranteed to go first (in fact, I think that I never saw it go first).
