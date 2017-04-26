@@ -179,7 +179,7 @@ SYSCALL_DEFINE0(printteamname)
 }
 
 
-static int do_tasktree(struct task_struct * root, struct taskinfo * task_array, int nr)
+static int do_tasktree(struct task_struct * root, struct taskinfo * task_array, int nr, int level)
 {
 	if (nr <= 0) {
 		//no more processes that we want to find
@@ -203,11 +203,17 @@ static int do_tasktree(struct task_struct * root, struct taskinfo * task_array, 
 		      comm?
 
 	*/
+
+	if (root == NULL) {
+		printk("Root process null, this is going to fail");
+	}
+
 	printk(root->pid);
 	printk(root->parent->pid);
 	printk(root->state);
 	printk(root->cred->uid.val);
 	printk(root->comm);
+	printk(level);
 	//set child process to -1
 	printk("DONE PRINTING PROCESS\n\n\n");
 
@@ -226,7 +232,7 @@ static int do_tasktree(struct task_struct * root, struct taskinfo * task_array, 
 			//append root->pid as child_pid to above task_info, and append to list
 			printk("Child found...");
 		}
-		count += do_tasktree(root, &task_array[count], nr - count); 
+		count += do_tasktree(root, &task_array[count], nr - count, level + 1); 
 	}
 
 	return count;
@@ -264,7 +270,7 @@ SYSCALL_DEFINE3(tasktree, struct taskinfo *, buf, int, nr, int, rootpid)
 
 	root = find_task_by_vpid(rootpid);
 
-	total = do_tasktree(root, task_array, nr);
+	total = do_tasktree(root, task_array, nr, 0);
 
 
 	kfree(task_array);
