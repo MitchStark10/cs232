@@ -55,15 +55,28 @@ public class CaeserCipherClient {
             return;
         }
 
-        System.out.println("Please enter the string to encrypt: ");
-        s.nextLine(); //skip over newline left
-        String unencryptedString = s.nextLine();
+        encryptUserInput(out, s, input);
+    }
 
-        out.append(unencryptedString).append("\n");
-        out.flush();
 
-        answer = input.readLine();
-        System.out.println("Encryption: " + answer);
+    private static void encryptUserInput(PrintWriter out, Scanner s, BufferedReader input) throws IOException {
+        String answer;
+        s.nextLine();
+        while(true) {
+            System.out.println("Please enter the string to encrypt: ");
+            String unencryptedString = s.nextLine();
+
+            if (unencryptedString.equals("exit")) {
+                System.out.println("Thanks for using the CaesarCipher service...");
+                return;
+            }
+
+            out.append(unencryptedString).append("\n");
+            out.flush();
+
+            answer = input.readLine();
+            System.out.println("Encryption: " + answer);
+        }
     }
 
 }
