@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class CaeserCipherClient {
+public class CaesarCipherClient {
     //client start point
     public static void main(String[] args) throws IOException {
 
@@ -66,7 +66,7 @@ public class CaeserCipherClient {
             System.out.println("Please enter the string to encrypt: ");
             String unencryptedString = s.nextLine();
 
-            if (unencryptedString.equals("exit")) {
+            if (unencryptedString.equals("quit")) {
                 System.out.println("Thanks for using the CaesarCipher service...");
                 return;
             }
