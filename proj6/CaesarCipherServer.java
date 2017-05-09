@@ -65,15 +65,19 @@ public class CaesarCipherServer {
     */
     private static String createCipher(String s, Integer cipherNum) {
         String cipheredString = "";
-
-        for (int i = 0; i < s.length(); i++){
-            char c = s.charAt(i);
-            //Process char
-            int temp = (int)c;
-            temp += cipherNum % 26;
-            cipheredString += (char)temp;
-        }
-
-        return cipheredString;
+	    for(int x = 0; x < s.length(); x++) {
+            char c = (char)(s.charAt(x) + cipherNum);
+		    if (c > 'z') {
+			    cipheredString += (char)(s.charAt(x) - (26 - cipherNum));
+		    }
+		    else {
+			    if (Character.isLetter(c)) {
+				    cipheredString += c;
+			    } else {
+				    cipheredString += s.charAt(x);
+			    }
+		    }
+	   }
+	   return cipheredString;
     }
 }
