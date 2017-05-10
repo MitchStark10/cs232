@@ -5,10 +5,13 @@ import java.io.OutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.concurrent.*;
 
 public class CaesarCipherServer {
 
     public static void main(String[] args) throws Exception {
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(8);
 
         // create socket
         int port = 4444;
@@ -17,10 +20,22 @@ public class CaesarCipherServer {
 
         // repeatedly wait for connections, and process
         while (true) {
-
-            // a "blocking" call which waits until a connection is requested
             Socket clientSocket = serverSocket.accept();
+            ConnectionCallable connection = new ConnectionCallable(clientSocket);
+            threadPool.submit(connection);
+        }
+    }
 
+    private static class ConnectionCallable implements Callable<Integer>
+    {
+        private Socket clientSocket;
+
+        public ConnectionCallable(Socket socketConnection) {
+            this.clientSocket = socketConnection;
+        }
+
+        public Integer call() throws Exception {
+            // a "blocking" call which waits until a connection is requested
             Boolean firstInput = true;
             Integer cipherNum = 0;
             System.err.println("Accepted connection from client");
@@ -56,9 +71,9 @@ public class CaesarCipherServer {
             out.close();
             in.close();
             clientSocket.close();
+            return 0;
         }
     }
-
 
     /*
     Takes a regular string, and ciphers it using the given cipherNum
